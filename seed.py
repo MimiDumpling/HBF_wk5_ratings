@@ -10,6 +10,7 @@ from server import app
 import datetime
 
 
+
 def load_users():
     """Load users from u.user into database."""
 
@@ -55,7 +56,7 @@ def load_movies():
         else:
             release_date = None
 
-        movie_title = movie_title[:-6]
+        movie_title = movie_title[:-7]
 
         movie = Movie(movie_id=movie_id,
                         title=movie_title,
@@ -77,7 +78,8 @@ def load_ratings():
 
     for row in open("seed_data/u.data"):
         row = row.rstrip()
-        user_id, movie_id, score, timestamp = row.split("")
+        print row
+        user_id, movie_id, score, timestamp = row.split()
 
         rating = Rating(user_id=user_id, 
                             movie_id=movie_id,
