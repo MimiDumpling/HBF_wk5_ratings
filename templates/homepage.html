@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Ratings</h1>
+
+<h2>Register Here:<h2/>
+
+<form action="/register">
+    Email Address:<input type="text" name="email">
+    Password:<input type="password" name="password">
+    <input type="submit" value="PUSH ME">
+</form>
+
+<h2>Movies</h2>
+<p><a href="/movies">View all movies</a></p>
+
+<h2>Users</h2>
+<p><a href="/users">View all users</a></p>
+
+{% endblock %}
