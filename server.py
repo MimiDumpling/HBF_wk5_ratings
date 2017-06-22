@@ -25,30 +25,56 @@ def index():
     return render_template("homepage.html")
 
 
+@app.route('/login')
+def send_to_login():
+    """Sends user to login form """
+
+    return render_template("login_form.html")
+
+
+@app.route('/process_login_form', methods=["POST"])
+def process_login_form():
+    """Determines if user/password exists in database."""
+
+    email = request.form.get("email")
+    password = request.form.get("password")
+    user = User.query.filter_by(email=email).first()
+
+
+    if user.password == password:
+        session['user_id'] = user.user_id
+        flash("You're now logged in.")
+
+    else:
+        flash("Incorrect login information. Please try again or register.")
+    
+    return redirect("/")
+       
+
 @app.route('/register', methods=["GET"])
-def register_form():
+def show_register_form():
     """Takes user's info and sends to registration form."""
 
-    email = request.args.get("email")
-    password = request.args.get("password")
 
-    return render_template("register_form.html", email=email, password=password)
+    return render_template("register_form.html")
 
 
 @app.route('/register', methods=["POST"])
-def register_process():
+def process_register_form():
     """Receives user's info and redirects to the homepage. """
 
     email = request.form.get("email")
     password = request.form.get("password")
 
-    if (User.query.filter_by(email=email).first()) == None:
+    if (User.query.filter_by(email=email).first()) is None:
         # check if they exist already. If not, then register them.
         user = User(email=email, password=password)
         db.session.add(user)
         db.session.commit()
-    #else:
-        # put up a flash message or an alert that tells them they exist and to login
+    else:
+        # put up a flash message that tells them they exist and to login
+        flash("You're already a user. Please login.")
+        # redirect to login
 
     return redirect("/")
 
@@ -59,6 +85,16 @@ def user_list():
 
     users = User.query.all()
     return render_template("user_list.html", users=users)
+
+
+@app.route("/logout")
+def log_user_out():
+    """Logs the user out and returns them to homepage"""
+
+    session.clear()
+    flash("You're logged out.")
+    return redirect("/")
+
 
 
 if __name__ == "__main__":

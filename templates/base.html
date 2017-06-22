@@ -5,10 +5,22 @@
 </head>
 
 <body>
-  Ratings
-  <hr>
+    Ratings
+    <hr>
 
-  {% block content %} put your content here {% endblock %}
+    <a href="/logout">Logout</a>
+
+    <div class="container">
+
+    <!-- Show flashed messages -->
+    {% with messages = get_flashed_messages() %}
+        {% for message in messages %}
+            <div class="alert alert-warning">{{ message }}</div>
+        {% endfor %}
+    {% endwith %}
+    </div>
+
+    {% block content %} put your content here {% endblock %}
 
 </body>
 </html>
