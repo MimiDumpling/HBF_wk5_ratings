@@ -86,6 +86,26 @@ def user_list():
     users = User.query.all()
     return render_template("user_list.html", users=users)
 
+@app.route("/user_info", methods=["GET"])
+def gives_user_info():
+    """Gives user information."""
+
+    user_id = request.args.get("user_id")
+    user_age_zip = db.session.query(User.age, User.zipcode).filter_by(user_id=user_id),first()
+    user_movieid_score = db.session.query(Rating.movie_id, Rating.score).filter_by(user_id=user_id)
+    
+
+
+
+
+
+
+
+
+    html = render_template("user_page.html", )
+
+    return html
+
 
 @app.route("/logout")
 def log_user_out():
