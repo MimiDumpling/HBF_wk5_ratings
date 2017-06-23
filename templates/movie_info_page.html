@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+Ratings For This Movie, {{ m.title }}, which was released on {{ m.released_at }}. Add your own rating <a href="/user_rating/{{ m.title }}">here</a>
+
+<ul>
+  {% for rating in m.ratings %}
+    <li>{{rating.score}}</li>
+  {% endfor%}
+</ul>
+
+{% endblock %}

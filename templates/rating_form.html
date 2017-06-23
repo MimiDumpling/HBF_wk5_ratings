@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<form action="/process_rating/{{ movie_title }}" method="POST">
+Rating, please rate 1-5 for {{ movie_title }}: <input type="text" name="rating">
+<input type="submit" value="Rate me!">
+</form>
+
+{% endblock %}

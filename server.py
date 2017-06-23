@@ -78,6 +78,26 @@ def process_register_form():
 
     return redirect("/")
 
+@app.route("/user_rating/<title>")
+def add_user_rating(title):
+    """Adds user's rating."""
+
+    t = title
+
+    return render_template("rating_form.html", movie_title = t)
+
+@app.route("/process_rating/<movie_title>", methods=["POST"])
+def process_rating(movie_title):
+    """Processes rating."""
+
+    rating = request.form.get("rating")
+
+    m = Movie.query.filter_by(title=movie_title).first()
+
+    m.score = rating
+
+    return redirect("/")
+
 
 @app.route("/users")
 def user_list():
@@ -86,25 +106,58 @@ def user_list():
     users = User.query.all()
     return render_template("user_list.html", users=users)
 
-@app.route("/user_info", methods=["GET"])
-def gives_user_info():
+
+@app.route("/user/<user>", methods=["GET"])
+def gives_user_info2(user):
     """Gives user information."""
+    user_obj = User.query.get(user)
+    return render_template('user_page_temp.html', user=user_obj)
 
-    user_id = request.args.get("user_id")
-    user_age_zip = db.session.query(User.age, User.zipcode).filter_by(user_id=user_id),first()
-    user_movieid_score = db.session.query(Rating.movie_id, Rating.score).filter_by(user_id=user_id)
+
+# @app.route("/user_info", methods=["GET"])
+# def gives_user_info():
+#     """Gives user information."""
+
+#     user_id = request.args.get("user_id")
+#     user_age_zip = db.session.query(User.age, User.zipcode).filter_by(user_id=user_id).first()
+#     user_movieid_score = db.session.query(Rating.movie_id, Rating.score).filter_by(user_id=user_id)
+#     movie_ids = []
+#     movie_titles = []
+#     movie_scores = []
+
+
+#     for thing in user_movieid_score:
+#         movie_ids.append(thing[0])
+#         movie_scores.append(thing[1])
+
+#     for movie in movie_ids:
+#         movie_titles.append((Movie.query.filter_by(movie_id=movie).first()).title)
+
+#     titles_scores = zip(movie_titles, movie_scores)     
+
+#     html = render_template("user_page.html", user_age_zip=user_age_zip, titles_scores=titles_scores)
+
+#     return html
+@app.route("/movies")
+def movies():
+    """Lists rated movies. """
     
+    m = Movie.query.order_by(Movie.title).all()
 
+    for movie in m:
+        if movie.title == "":
+            m.remove(movie)
 
+    return render_template('movie_page.html', movies=m)
 
+@app.route("/movie/<movie>")
+def makes_movie_info_page(movie):
+    """makes a movie info page """
 
+    movie_obj = Movie.query.filter_by(title=movie).first()
 
+    return render_template('movie_info_page.html', m=movie_obj)
 
-
-
-    html = render_template("user_page.html", )
-
-    return html
 
 
 @app.route("/logout")
